@@ -10,4 +10,9 @@ void getRegisterMessage
 const char *AccessPoint, const char *RegisterType, 
 char **regisMsg);
 
+
+void getReportMessage
+(const char *DeviceType, const char *GroupID,
+int *statuses, const int blockNum, char **reportMsg);
+
 #endif
