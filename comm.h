@@ -9,7 +9,7 @@ typedef struct {
 
 
 void senderPrepare(senderContext *sc, char *destIP, int destPort);
-ssize_t sendJson(senderContext *sc, char *obj);
+ssize_t sendJson(senderContext *sc, char *obj, char **recvMsg);
 void senderRelease(senderContext *sc);
 
 

@@ -8,7 +8,6 @@
 #include "comm.h"
 
 void senderPrepare(senderContext *sc, char *destIP, int destPort) {
-
     sc->sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if(sc->sockfd==-1){
     	printf("socket failed:%d",errno);
@@ -22,24 +21,24 @@ void senderPrepare(senderContext *sc, char *destIP, int destPort) {
 }
 
 
-ssize_t sendJson(senderContext *sc, char *obj) {
+ssize_t sendJson(senderContext *sc, char *obj, char **recvMsg) {
     ssize_t sentSize = 0;
     if(connect(sc->sockfd, (struct sockaddr*)(sc->destAddr),
         sizeof(struct sockaddr)) == -1){
-    	printf("connect failed:%d",errno);
+    	printf("connect failed:%d", errno);
+
     } else {
         sentSize = send(sc->sockfd, obj, strlen(obj),0);
         printf("send success\n");
 
-        char recv[1024];
-        memset(recv, 0, sizeof(recv));
-        if (read(sc->sockfd, recv, sizeof(recv)) < 0) {
+        char *recv = malloc(sizeof(char) * 0x400);
+        // memset(recv, 0, sizeof(char) * 0x400);
+        if (read(sc->sockfd, recv, sizeof(char) * 0x4000) < 0) {
             perror("cannot read");
             exit(4);
         }
         printf("Received %s from server\n", recv);
-
-
+        *recvMsg = recv;
     }
     close(sc->sockfd);
     return sentSize;
